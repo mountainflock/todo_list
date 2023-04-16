@@ -1,0 +1,65 @@
+body {
+  margin: 20px 80px;
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: 600;
+  background-color: rgb(220, 247, 234);
+}
+
+.header {
+  display: flex;
+  height: 100px;
+  font-size: 46px;
+  color: rgb(0, 93, 84);
+  font-family: "Neucha", cursive;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background-color: rgb(114, 237, 216);
+  padding: 40px;
+}
+
+.todos {
+  flex-direction: column;
+  width: 70%;
+  background-color: rgb(186, 237, 114);
+  padding: 40px;
+}
+
+input {
+  border: none;
+  border-radius: 4px;
+}
+
+.new-project-invisible {
+  display: none;
+}
+
+.new-todo-invisible {
+  display: none;
+}
+
+.new-project-button,
+.new-todo-button {
+  height: 30px;
+  width: 30px;
+  border: none;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 100;
+}
+
+.new-project-button {
+  background-color: rgb(114, 237, 216);
+}
+
+.new-todo-button {
+  background-color: rgb(186, 237, 114);
+}
