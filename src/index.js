@@ -1,4 +1,3 @@
-import { getDate } from "date-fns";
 import "./style.css";
 import "date-fns";
 
@@ -18,30 +17,8 @@ class Project {
   }
 }
 
-const todo1 = new Todo("Read", "Good books only", "21.02.2029", "High", false);
-const todo2 = new Todo(
-  "Learn",
-  "It's not that hard",
-  "21.02.2029",
-  "Medium",
-  true
-);
-const todo3 = new Todo("Sleep", "", "15.01.2000", "Low", false);
-const todo4 = new Todo(
-  "Rest",
-  "Rest is everything",
-  "21.02.2029",
-  "High",
-  true
-);
-
-const project1 = new Project("Work");
-const project2 = new Project("Study");
-const project3 = new Project("Sport");
-const project4 = new Project("Leasure");
-
-let myTodoList = [todo1, todo2, todo3, todo4];
-let myProjectsList = [project1, project2, project2, project4];
+let myTodoList = [];
+let myProjectsList = [];
 
 const todoList = document.querySelector(".todos");
 const projectsList = document.querySelector(".projects");
@@ -65,18 +42,47 @@ function addNewTodo(title, description, dueDate, priority, isComplete) {
 }
 
 function displayProjectsList() {
-  const projectDivs = document.querySelectorAll(".project-item");
   for (let i = 0; i < myProjectsList.length; i++) {
-    projectDivs[i].textContent = myProjectsList[i].title;
+    const projectDiv = document.createElement("div");
+    projectDiv.classList.add("project-item");
+    projectDiv.dataset.index = `${i}`;
+    projectDiv.textContent = myProjectsList[i].title;
+    projectsList.appendChild(projectDiv);
+
+    const deleteProjectButton = document.createElement("button");
+    deleteProjectButton.classList.add("delete-project-button");
+    deleteProjectButton.textContent = "🗑️";
+    projectDiv.appendChild(deleteProjectButton);
+
+    deleteProjectButton.addEventListener("click", () => {
+      const projectToDelete = projectDiv.dataset.index;
+      removeProject(projectToDelete);
+      projectDiv.textContent = "";
+    });
   }
 }
 
 function displayTodoList() {
-  const todoDivs = document.querySelectorAll(".todo-item");
   for (let i = 0; i < myTodoList.length; i++) {
-    todoDivs[i].textContent = myTodoList[i].title;
+    const todoDiv = document.createElement("div");
+    todoDiv.classList.add("todo-item");
+    todoDiv.dataset.index = `${i}`;
+    todoDiv.textContent = myTodoList[i].title;
+    todoList.appendChild(todoDiv);
+
+    const deleteTodoButton = document.createElement("button");
+    deleteTodoButton.classList.add("delete-todo-button");
+    deleteTodoButton.textContent = "🗑️";
+    todoDiv.appendChild(deleteTodoButton);
+
+    deleteTodoButton.addEventListener("click", () => {
+      const todoToDelete = todoDiv.dataset.index;
+      removeTodo(todoToDelete);
+      todoDiv.textContent = "";
+    });
   }
 }
+
 newTodoButton.addEventListener("click", () => {
   formTodo.classList.remove("new-todo-invisible");
 });
@@ -110,6 +116,7 @@ formTodo.addEventListener("submit", function (event) {
   const todoPriority = document.querySelector("#todo-priority").checked;
   const newTodo = document.createElement("div");
   newTodo.classList.add("todo-item");
+
   //   const todoComplete
 
   if (todoTitle !== "") {
@@ -147,77 +154,56 @@ function removeTodo(todo) {
   myTodoList = myTodoList.filter(function (todos) {
     return todos !== myTodoList[todo];
   });
-  todoList.textContent = "";
-  displayTodoList();
+  //   displayTodoList();
 }
 
 function removeProject(project) {
-  myTodoList = myTodoList.filter(function (projects) {
+  myProjectsList = myProjectsList.filter(function (projects) {
     return projects !== myProjectsList[project];
   });
-  todoList.textContent = "";
-  displayProjectsList();
+  //   displayProjectsList();
 }
 
 // function createElement(tag, parent, textContent, classList) {
-//   const el = document.createElement(tag);
+//   const element = document.createElement(tag);
 //   if (textContent != null) {
-//     el.textContent = textContent;
+//     element.textContent = textContent;
 //   }
 //   if (classList != null) {
-//     el.classList.add(...classList);
+//     element.classList.add(...classList);
 //   }
-//   parent.appendChild(el);
-//   return el;
+//   parent.appendChild(element);
+//   return element;
 // }
 
-// function createElement(i) {
-//   const bookItem = createElement("div", todoList, null, [
-//     "book",
-//     ...(myList[i].read ? ["book-item-status-read"] : []),
-//   ]);
-//   bookItem.dataset.index = `${i}`;
+// function createProjectItem(i) {
+//   const projectItem = createElement("div", projectsList, null, ["project"]);
+//   projectItem.dataset.index = `${i}`;
 
-//   createElement("div", bookItem, `${myList[i].title}`, [
-//     "book-item-text",
-//     "book-item-title",
-//   ]);
+//   const todoItem = createElement("div", todoList, null, "todo");
+//   todoItem.dataset.index = `${i}`;
 
-//   createElement("div", bookItem, `${myList[i].author}`, [
-//     "book-item-text",
-//     "book-item-author",
+//   const deleteProjectButton = createElement("button", projectItem, "🗑️", [
+//     "delete-project-button",
 //   ]);
-
-//   createElement("div", bookItem, `${myList[i].pages} pages`, [
-//     "book-item-text",
-//     "book-item-pages",
-//   ]);
-
-//   createElement("div", bookItem, myList[i].read ? "read" : "unread", [
-//     "book-item-text",
-//     "book-item-read",
-//   ]);
-
-//   const bookButtonsSection = createElement("div", bookItem, null, [
-//     "book-button-section",
-//   ]);
-
-//   const deleteButton = createElement("button", bookButtonsSection, "🗑️", [
-//     "delete-button",
-//   ]);
-//   deleteButton.addEventListener("click", () => {
-//     const itemToDelete = bookItem.dataset.index;
-//     removeTodo(itemToDelete);
+//   deleteProjectButton.addEventListener("click", () => {
+//     const projectToDelete = projectItem.dataset.index;
+//     removeProject(projectToDelete);
 //   });
 
-//   const changeStatusButton = createElement(
-//     "button",
-//     bookButtonsSection,
-//     "Change status",
-//     ["change-status-button"]
-//   );
+//   const deleteTodoButton = createElement("button", todoItem, "🗑️", [
+//     "delete-item-button",
+//   ]);
+//   deleteTodoButton.addEventListener("click", () => {
+//     const todoToDelete = todoItem.dataset.index;
+//     removeProject(projectToDelete);
+//   });
+
+//   const changeStatusButton = createElement("button", todoItem, "⚪", [
+//     "change-status-button",
+//   ]);
 //   changeStatusButton.addEventListener("click", () => {
-//     const itemToStatusChange = bookItem.dataset.index;
+//     const itemToStatusChange = todoItem.dataset.index;
 //     changeStatus(itemToStatusChange);
 //   });
 // }
