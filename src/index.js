@@ -1,24 +1,55 @@
 import "./style.css";
 import "date-fns";
 
-class Todo {
-  constructor(title, description, dueDate, priority, isComplete) {
+class Project {
+  constructor(projectTitle) {
+    this.projectTitle = projectTitle;
+  }
+}
+
+class Todo extends Project {
+  constructor(projectTitle, title, description, dueDate, priority) {
+    super(projectTitle);
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.isComplete = isComplete;
   }
 }
 
-class Project {
-  constructor(title) {
-    this.title = title;
-  }
-}
+const allProjects = new Project("All");
+const workProjects = new Project("Work");
+const studyProjects = new Project("Study");
+const leisureProjects = new Project("Leisure");
 
-let myTodoList = [];
-let myProjectsList = [];
+const todo1 = new Todo(
+  "Home",
+  "Do laundry",
+  "Black and color",
+  "21.04.2022",
+  "Medium"
+);
+const todo2 = new Todo(
+  "Work",
+  "Delete unecessary mail",
+  "Filter inboxes",
+  "31.04.2023"
+);
+const todo3 = new Todo("Study", "Finish JS Course", "Odin", "31.05.2023");
+const todo4 = new Todo(
+  "Leisure",
+  "Watch Loro film",
+  "On the TV screen",
+  "20.04.2023"
+);
+
+let myTodoList = [todo1, todo2, todo3, todo4];
+let myProjectsList = [
+  allProjects,
+  workProjects,
+  studyProjects,
+  leisureProjects,
+];
 
 const todoList = document.querySelector(".todos");
 const projectsList = document.querySelector(".projects");
@@ -36,8 +67,22 @@ function addNewProject(title) {
   myProjectsList.push(project);
 }
 
-function addNewTodo(title, description, dueDate, priority, isComplete) {
-  const todoItem = new Todo(title, description, dueDate, priority, isComplete);
+function addNewTodo(
+  projectTitle,
+  title,
+  description,
+  dueDate,
+  priority,
+  isComplete
+) {
+  const todoItem = new Todo(
+    projectTitle,
+    title,
+    description,
+    dueDate,
+    priority,
+    isComplete
+  );
   myTodoList.push(todoItem);
 }
 
@@ -46,8 +91,12 @@ function displayProjectsList() {
     const projectDiv = document.createElement("div");
     projectDiv.classList.add("project-item");
     projectDiv.dataset.index = `${i}`;
-    projectDiv.textContent = myProjectsList[i].title;
+    projectDiv.textContent = myProjectsList[i].projectTitle;
     projectsList.appendChild(projectDiv);
+
+    projectDiv.addEventListener("click", () => {
+      // document.querySelector("todos").
+    });
 
     const deleteProjectButton = document.createElement("button");
     deleteProjectButton.classList.add("delete-project-button");
@@ -80,6 +129,17 @@ function displayTodoList() {
       removeTodo(todoToDelete);
       todoDiv.textContent = "";
     });
+
+    const completeTodoButton = document.createElement("button");
+    completeTodoButton.classList.add("complete-button");
+    completeTodoButton.textContent = "◻️";
+    todoDiv.appendChild(completeTodoButton);
+
+    completeTodoButton.addEventListener("click", () => {
+      const todoToComplete = todoDiv.dataset.index;
+      completeTodoButton.textContent = "☑️";
+      todoToComplete.classList.toggle("complete-todo");
+    });
   }
 }
 
@@ -110,6 +170,8 @@ formProject.addEventListener("submit", function (event) {
 
 formTodo.addEventListener("submit", function (event) {
   event.preventDefault();
+
+  const toDoProject = document.querySelector("#project-list").value;
   const todoTitle = document.querySelector(".todo-title").value;
   const todoDescription = document.querySelector(".todo-description").value;
   const todoDueDate = document.querySelector(".todo-due-date").value;
@@ -117,17 +179,15 @@ formTodo.addEventListener("submit", function (event) {
   const newTodo = document.createElement("div");
   newTodo.classList.add("todo-item");
 
-  //   const todoComplete
-
   if (todoTitle !== "") {
     todoList.appendChild(newTodo);
 
     addNewTodo(
+      toDoProject,
       todoTitle,
       todoDescription,
       todoDueDate,
       todoPriority
-      //   todoComplete
     );
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = "";
@@ -154,14 +214,12 @@ function removeTodo(todo) {
   myTodoList = myTodoList.filter(function (todos) {
     return todos !== myTodoList[todo];
   });
-  //   displayTodoList();
 }
 
 function removeProject(project) {
   myProjectsList = myProjectsList.filter(function (projects) {
     return projects !== myProjectsList[project];
   });
-  //   displayProjectsList();
 }
 
 // function createElement(tag, parent, textContent, classList) {

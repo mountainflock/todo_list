@@ -9,8 +9,6 @@ body {
   display: flex;
   height: 100px;
   font-size: 46px;
-  color: rgb(0, 93, 84);
-  /* font-family: "Neucha", cursive; */
   align-items: center;
 }
 
@@ -70,4 +68,26 @@ input {
   width: 20px;
   height: 20px;
   border: none;
+}
+
+.project-button,
+.all-projects-button {
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(114, 237, 216);
+  height: 20px;
+  width: 80px;
+}
+
+.all-projects-button {
+  background-color: rgb(80, 184, 167);
+}
+
+.complete-button {
+  border: none;
+  background-color: rgb(186, 237, 114);
+}
+
+.complete-todo {
+  text-decoration: line-through;
 }
