@@ -1,6 +1,5 @@
 import "./style.css";
 import "date-fns";
-import { displayProjectsList, displayAllTasks } from "./domManipulations";
+import { renderPage } from "./domManipulations";
 
-displayProjectsList();
-displayAllTasks();
+renderPage();

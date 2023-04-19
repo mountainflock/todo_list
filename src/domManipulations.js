@@ -119,3 +119,8 @@ formTask.addEventListener("submit", function (event) {
     displayAllTasks();
   }
 });
+
+export function renderPage() {
+  displayProjectsList();
+  displayAllTasks();
+}
