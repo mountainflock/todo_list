@@ -4,17 +4,11 @@ export default class Project {
   }
 }
 
-const allProjects = new Project("All");
 const workProjects = new Project("Work");
 const studyProjects = new Project("Study");
 const leisureProjects = new Project("Leisure");
 
-export let myProjectsList = [
-  allProjects,
-  workProjects,
-  studyProjects,
-  leisureProjects,
-];
+export let myProjectsList = [workProjects, studyProjects, leisureProjects];
 
 export function addNewProject(title) {
   const project = new Project(title);

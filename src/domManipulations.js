@@ -1,5 +1,5 @@
 import { myProjectsList, addNewProject, removeProject } from "./project";
-import { myTasksList, addNewTask, removeTask } from "./task";
+import { myTasksList, addNewTask, removeTask, changeTaskStatus } from "./task";
 import { format } from "date-fns";
 
 const taskList = document.querySelector(".task-list");
@@ -11,7 +11,7 @@ const newProjectButton = document.querySelector(".new-project-button");
 const newTaskButton = document.querySelector(".new-task-button");
 
 export function displayProjectsList() {
-  for (let i = 1; i < myProjectsList.length; i++) {
+  for (let i = 0; i < myProjectsList.length; i++) {
     const projectDiv = document.createElement("div");
     const projectTitleDiv = document.createElement("div");
     projectDiv.appendChild(projectTitleDiv);
@@ -19,14 +19,6 @@ export function displayProjectsList() {
     projectDiv.dataset.index = `${i}`;
     projectDiv.textContent = myProjectsList[i].projectTitle;
     projectsList.appendChild(projectDiv);
-
-    // projectTitleDiv.addEventListener("click", () => {
-    //   myTasksList = myTasksList.filter(function (tasks) {
-    //     return tasks === myTasksList[i].projectTitle;
-    //   });
-    //   taskList.textContent = "";
-    //   displayAllTasks();
-    // });
 
     const deleteProjectDiv = document.createElement("div");
     const deleteProjectButton = document.createElement("button");
@@ -40,23 +32,10 @@ export function displayProjectsList() {
       const projectToDelete = projectDiv.dataset.index;
       removeProject(projectToDelete);
       projectsList.removeChild(projectDiv);
+      projectsList.textContent = "";
+      displayProjectsList();
     });
   }
-}
-
-function displayAllProjectsLink() {
-  const projectDiv = document.createElement("div");
-  const projectTitleDiv = document.createElement("div");
-  projectDiv.appendChild(projectTitleDiv);
-  projectDiv.classList.add("project-item");
-  projectDiv.classList.add("all-projects");
-  projectDiv.textContent = "ALL";
-  projectsList.appendChild(projectDiv);
-
-  projectTitleDiv.addEventListener("click", () => {
-    taskList.textContent = "";
-    displayAllTasks();
-  });
 }
 
 export function displayAllTasks() {
@@ -71,14 +50,14 @@ export function displayAllTasks() {
     taskList.appendChild(taskDiv);
 
     const dueDateDiv = document.createElement("div");
+    if (myTasksList[i].dueDate !== "") {
+      const dateObject = new Date(myTasksList[i].dueDate);
+      const dateMonth = format(dateObject, "MMM");
+      const dateDay = format(dateObject, "do");
+      const dateFormated = `${dateMonth} ${dateDay}`;
+      dueDateDiv.textContent = dateFormated;
+    }
 
-    const dateObject = new Date(myTasksList[i].dueDate);
-    const dateMonth = format(dateObject, "MMM");
-    const dateDay = format(dateObject, "do");
-    const dateFormated = `${dateMonth} ${dateDay}`;
-    dueDateDiv.textContent = dateFormated;
-
-    // dueDateDiv.textContent = myTasksList[i].dueDate;
     dueDateDiv.classList.add("due-date-div");
     taskDiv.appendChild(dueDateDiv);
 
@@ -101,16 +80,23 @@ export function displayAllTasks() {
 
     const completeTaskButton = document.createElement("button");
     completeTaskButton.classList.add("complete-button");
-    completeTaskButton.textContent = "⬜";
+    if (myTasksList[i].isComplete === true) {
+      completeTaskButton.textContent = "✔️";
+      taskTitleDiv.classList.add("complete-task");
+    } else {
+      completeTaskButton.textContent = "⬜";
+      taskTitleDiv.classList.remove("complete-task");
+    }
     taskDiv.insertBefore(completeTaskButton, taskTitleDiv);
 
     completeTaskButton.addEventListener("click", () => {
-      taskTitleDiv.classList.toggle("complete-task");
-      if (taskTitleDiv.className === "task-title-div complete-task") {
-        completeTaskButton.textContent = "✔️";
-      } else {
-        completeTaskButton.textContent = "⬜";
-      }
+      changeTaskStatus(myTasksList[i]);
+      //   taskTitleDiv.classList.toggle("complete-task");
+      // if (taskTitleDiv.className === "task-title-div complete-task") {
+      //   completeTaskButton.textContent = "✔️";
+      // } else {
+      //   completeTaskButton.textContent = "⬜";
+      // }
     });
 
     const deleteTaskButton = document.createElement("button");
@@ -121,7 +107,8 @@ export function displayAllTasks() {
     deleteTaskButton.addEventListener("click", () => {
       const taskToDelete = taskDiv.dataset.index;
       removeTask(taskToDelete);
-      taskDiv.textContent = "";
+      taskList.textContent = "";
+      displayAllTasks();
     });
   }
 }
@@ -148,7 +135,7 @@ formProject.addEventListener("submit", function (event) {
     }
     formProject.classList.toggle("new-project-invisible");
     projectsList.textContent = "";
-    displayAllProjectsLink();
+    // displayAllProjectsLink();
     displayProjectsList();
   }
 });
@@ -161,6 +148,7 @@ formTask.addEventListener("submit", function (event) {
   const taskDescription = document.querySelector(".task-description").value;
   const taskDueDate = document.querySelector(".task-due-date").value;
   const taskPriority = document.querySelector("#task-priority").value;
+
   const newTask = document.createElement("div");
 
   if (taskTitle !== "") {
@@ -183,10 +171,7 @@ formTask.addEventListener("submit", function (event) {
   }
 });
 
-function displayTaskList() {}
-
 export function renderPage() {
-  displayAllProjectsLink();
   displayProjectsList();
   displayAllTasks();
 }
