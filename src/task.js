@@ -1,12 +1,13 @@
 import Project from "./project";
 
 export default class Task extends Project {
-  constructor(projectTitle, title, description, dueDate, priority) {
+  constructor(projectTitle, title, description, dueDate, priority, isComplete) {
     super(projectTitle);
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
+    this.isComplete = isComplete;
   }
 }
 
@@ -15,22 +16,32 @@ const task1 = new Task(
   "Do laundry",
   "Black and color",
   "04/21",
-  "Medium"
+  "Medium",
+  false
 );
 const task2 = new Task(
   "Work",
   "Delete unecessary mail",
   "Filter inboxes",
   "04/30",
-  "Medium"
+  "Medium",
+  false
 );
-const task3 = new Task("Study", "Finish JS Course", "Odin", "05/31", "High");
+const task3 = new Task(
+  "Study",
+  "Finish JS Course",
+  "Odin",
+  "05/31",
+  "High",
+  false
+);
 const task4 = new Task(
   "Leisure",
   "Watch Loro film",
   "On the TV screen",
   "05/01",
-  "Low"
+  "Low",
+  false
 );
 
 export let myTasksList = [task1, task2, task3, task4];
@@ -52,6 +63,14 @@ export function addNewTask(
     isComplete
   );
   myTasksList.push(taskItem);
+}
+
+export function changeTaskStatus(task) {
+  if (task.isComplete === true) {
+    task.isComplete = false;
+  } else {
+    task.isComplete = true;
+  }
 }
 
 export function removeTask(task) {
