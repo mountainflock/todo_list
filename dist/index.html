@@ -7,8 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Neucha&family=Source+Sans+3:wght@300&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Source+Sans+3:wght@300;400&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
     <script defer src="main.js"></script>
     <title>Todo List</title>
@@ -17,12 +21,15 @@
     <div class="header">TODO LIST</div>
     <div class="container">
       <div class="projects">
-        Projects <button type="button" class="new-project-button">+</button>
+        Projects
+        <button type="button" class="new-project-button">+</button>
+        <div class="project-list"></div>
         <form class="new-project new-project-invisible">
           <label for="project-title"></label>
           <input
             type="text"
             class="project-title"
+            maxlength="20"
             placeholder="Title"
             required
           />
@@ -30,64 +37,41 @@
         </form>
       </div>
       <div class="tasks">
-        To-Dos <button type="button" class="new-task-button">+</button>
+        To-Dos
+        <button type="button" class="new-task-button">+</button>
+        <div class="task-list"></div>
+
         <form class="new-task new-task-invisible">
-          <p>
-            <label for="title"></label>
-            <input
-              type="text"
-              class="task-title"
-              placeholder="Title"
-              required
-            />
-          </p>
-          <p>
-            <label for="description"></label>
-            <input
-              type="text"
-              class="task-description"
-              placeholder="Description"
-            />
-          </p>
-          <p>
-            <label for="dueDate">Due date:</label>
-            <input type="date" class="task-due-date" />
-          </p>
-          <p>
-            <label for="priority"></label>
-            <label for="low">Low</label>
-            <input
-              type="radio"
-              id="task-priority"
-              name="priority"
-              class="low"
-              checked
-            />
-            <label for="medium">Medium</label>
-            <input
-              type="radio"
-              id="task-priority"
-              name="priority"
-              class="medium"
-            />
-            <label for="high">High</label>
-            <input
-              type="radio"
-              id="task-priority"
-              name="priority"
-              class="high"
-            />
-          </p>
-          <div>
-            <label for="project">Project:</label>
-            <select name="Project" id="project-list">
-              <option value="all" class="all-projects">All</option>
-              <option value="work" class="work-projects">Work</option>
-              <option value="study" class="study-projects">Study</option>
-              <option value="leisure" class="leisure-projects">Leisure</option>
-            </select>
-          </div>
-          <p><button type="submit" class="to-do-submit">ADD</button></p>
+          <label for="title"></label>
+          <input
+            type="text"
+            class="task-title"
+            maxlength="20"
+            placeholder="Title"
+            required
+          />
+          <label for="description"></label>
+          <input
+            type="text"
+            class="task-description"
+            maxlength="30"
+            placeholder="Description"
+          />
+          <label for="dueDate">Due date:</label>
+          <input type="date" class="task-due-date" />
+          <label for="priority">Priority:</label>
+          <select name="Priority" id="task-priority">
+            <option value="Low" checked>Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+          <label for="project">Project:</label>
+          <select name="Project" id="project-list">
+            <option value="work">Work</option>
+            <option value="study">Study</option>
+            <option value="leisure">Leisure</option>
+          </select>
+          <button type="submit" class="to-do-submit">ADD</button>
         </form>
       </div>
     </div>
