@@ -21,7 +21,7 @@ export function addNewProject(title) {
   myProjectsList.push(project);
 }
 
-function removeProject(project) {
+export function removeProject(project) {
   myProjectsList = myProjectsList.filter(function (projects) {
     return projects !== myProjectsList[project];
   });

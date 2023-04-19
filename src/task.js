@@ -52,17 +52,17 @@ export function addNewTask(
   myTasksList.push(taskItem);
 }
 
-function changeStatus(task) {
-  if (myTasksList[task].isComplete === true) {
-    myTasksList[task].isComplete = false;
-  } else {
-    myTasksList[task].isComplete = true;
-  }
-  todoList.textContent = "";
-  displayAllTodos();
-}
+// function changeStatus(task) {
+//   if (myTasksList[task].isComplete === true) {
+//     myTasksList[task].isComplete = false;
+//   } else {
+//     myTasksList[task].isComplete = true;
+//   }
+//   taskList.textContent = "";
+//   displayAllTasks();
+// }
 
-function removeTodo(task) {
+export function removeTask(task) {
   myTasksList = myTasksList.filter(function (tasks) {
     return tasks !== myTasksList[task];
   });

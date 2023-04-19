@@ -23,7 +23,7 @@ body {
   padding: 40px;
 }
 
-.todos {
+.tasks {
   flex-direction: column;
   width: 70%;
   background-color: rgb(186, 237, 114);
@@ -39,12 +39,12 @@ input {
   display: none;
 }
 
-.new-todo-invisible {
+.new-task-invisible {
   display: none;
 }
 
 .new-project-button,
-.new-todo-button {
+.new-task-button {
   height: 30px;
   width: 30px;
   border: none;
@@ -58,13 +58,13 @@ input {
   background-color: rgb(114, 237, 216);
 }
 
-.new-todo-button,
-.delete-todo-button {
+.new-task-button,
+.delete-task-button {
   background-color: rgb(186, 237, 114);
 }
 
 .delete-project-button,
-.delete-todo-button {
+.delete-task-button {
   width: 20px;
   height: 20px;
   border: none;
@@ -88,6 +88,6 @@ input {
   background-color: rgb(186, 237, 114);
 }
 
-.complete-todo {
+.complete-task {
   text-decoration: line-through;
 }

@@ -1,13 +1,13 @@
 import { myProjectsList, addNewProject } from "./project";
-import { myTasksList, addNewTask } from "./task";
+import { myTasksList, addNewTask, removeTask } from "./task";
 
-const taskList = document.querySelector(".todos");
+const taskList = document.querySelector(".tasks");
 const projectsList = document.querySelector(".projects");
 const formProject = document.querySelector(".new-project");
-const formTask = document.querySelector(".new-todo");
+const formTask = document.querySelector(".new-task");
 const inputs = document.querySelectorAll("input");
 const newProjectButton = document.querySelector(".new-project-button");
-const newTaskButton = document.querySelector(".new-todo-button");
+const newTaskButton = document.querySelector(".new-task-button");
 
 export function displayProjectsList() {
   for (let i = 0; i < myProjectsList.length; i++) {
@@ -37,21 +37,9 @@ export function displayProjectsList() {
 export function displayAllTasks() {
   for (let i = 0; i < myTasksList.length; i++) {
     const taskDiv = document.createElement("div");
-    taskDiv.classList.add("todo-item");
     taskDiv.dataset.index = `${i}`;
     taskDiv.textContent = myTasksList[i].title;
     taskList.appendChild(taskDiv);
-
-    const deleteTaskButton = document.createElement("button");
-    deleteTaskButton.classList.add("delete-todo-button");
-    deleteTaskButton.textContent = "🗑️";
-    taskDiv.appendChild(deleteTaskButton);
-
-    deleteTaskButton.addEventListener("click", () => {
-      const taskToDelete = taskDiv.dataset.index;
-      removeTodo(taskToDelete);
-      taskDiv.textContent = "";
-    });
 
     const completeTaskButton = document.createElement("button");
     completeTaskButton.classList.add("complete-button");
@@ -59,15 +47,29 @@ export function displayAllTasks() {
     taskDiv.appendChild(completeTaskButton);
 
     completeTaskButton.addEventListener("click", () => {
-      const taskToComplete = taskDiv.dataset.index;
-      completeTaskButton.textContent = "✅";
-      taskToComplete.classList.toggle("complete-todo");
+      taskDiv.classList.toggle("complete-task");
+      if (taskDiv.className === "complete-task") {
+        completeTaskButton.textContent = "✅";
+      } else {
+        completeTaskButton.textContent = "⬜";
+      }
+    });
+
+    const deleteTaskButton = document.createElement("button");
+    deleteTaskButton.classList.add("delete-task-button");
+    deleteTaskButton.textContent = "🗑️";
+    taskDiv.appendChild(deleteTaskButton);
+
+    deleteTaskButton.addEventListener("click", () => {
+      const taskToDelete = taskDiv.dataset.index;
+      removeTask(taskToDelete);
+      taskDiv.textContent = "";
     });
   }
 }
 
 newTaskButton.addEventListener("click", () => {
-  formTask.classList.remove("new-todo-invisible");
+  formTask.classList.remove("new-task-invisible");
 });
 
 newProjectButton.addEventListener("click", () => {
@@ -94,28 +96,28 @@ formProject.addEventListener("submit", function (event) {
 formTask.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const toDoProject = document.querySelector("#project-list").value;
-  const todoTitle = document.querySelector(".todo-title").value;
-  const todoDescription = document.querySelector(".todo-description").value;
-  const todoDueDate = document.querySelector(".todo-due-date").value;
-  const todoPriority = document.querySelector("#todo-priority").checked;
-  const newTodo = document.createElement("div");
-  newTodo.classList.add("todo-item");
+  const taskProject = document.querySelector("#project-list").value;
+  const taskTitle = document.querySelector(".task-title").value;
+  const taskDescription = document.querySelector(".task-description").value;
+  const taskDueDate = document.querySelector(".task-due-date").value;
+  const taskPriority = document.querySelector("#task-priority").checked;
+  const newTask = document.createElement("div");
+  newTask.classList.add("task-item");
 
-  if (todoTitle !== "") {
-    taskList.appendChild(newTodo);
+  if (taskTitle !== "") {
+    taskList.appendChild(newTask);
 
     addNewTask(
-      toDoProject,
-      todoTitle,
-      todoDescription,
-      todoDueDate,
-      todoPriority
+      taskProject,
+      taskTitle,
+      taskDescription,
+      taskDueDate,
+      taskPriority
     );
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = "";
     }
-    formTask.classList.add("new-todo-invisible");
+    formTask.classList.add("new-task-invisible");
     displayAllTasks();
   }
 });
