@@ -9,7 +9,7 @@ const inputs = document.querySelectorAll("input");
 const newProjectButton = document.querySelector(".new-project-button");
 const newTaskButton = document.querySelector(".new-todo-button");
 
-function displayProjectsList() {
+export function displayProjectsList() {
   for (let i = 0; i < myProjectsList.length; i++) {
     const projectDiv = document.createElement("div");
     projectDiv.classList.add("project-item");
@@ -34,12 +34,12 @@ function displayProjectsList() {
   }
 }
 
-function displayAllTasks() {
-  for (let i = 0; i < myTodoList.length; i++) {
+export function displayAllTasks() {
+  for (let i = 0; i < myTasksList.length; i++) {
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("todo-item");
     taskDiv.dataset.index = `${i}`;
-    taskDiv.textContent = myTodoList[i].title;
+    taskDiv.textContent = myTasksList[i].title;
     taskList.appendChild(taskDiv);
 
     const deleteTaskButton = document.createElement("button");

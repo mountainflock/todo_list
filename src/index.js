@@ -1,11 +1,6 @@
 import "./style.css";
 import "date-fns";
+import { displayProjectsList, displayAllTasks } from "./domManipulations";
 
-displayAllTodos();
 displayProjectsList();
-
-function removeProject(project) {
-  myProjectsList = myProjectsList.filter(function (projects) {
-    return projects !== myProjectsList[project];
-  });
-}
+displayAllTasks();
