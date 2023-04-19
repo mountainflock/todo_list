@@ -17,7 +17,7 @@ const task1 = new Task(
   "Black and color",
   "04/21",
   "Medium",
-  false
+  true
 );
 const task2 = new Task(
   "Work",
