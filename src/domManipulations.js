@@ -80,6 +80,8 @@ export function displayAllTasks() {
 
     const completeTaskButton = document.createElement("button");
     completeTaskButton.classList.add("complete-button");
+    taskDiv.insertBefore(completeTaskButton, taskTitleDiv);
+
     if (myTasksList[i].isComplete === true) {
       completeTaskButton.textContent = "✔️";
       taskTitleDiv.classList.add("complete-task");
@@ -87,16 +89,15 @@ export function displayAllTasks() {
       completeTaskButton.textContent = "⬜";
       taskTitleDiv.classList.remove("complete-task");
     }
-    taskDiv.insertBefore(completeTaskButton, taskTitleDiv);
 
     completeTaskButton.addEventListener("click", () => {
       changeTaskStatus(myTasksList[i]);
-      //   taskTitleDiv.classList.toggle("complete-task");
-      // if (taskTitleDiv.className === "task-title-div complete-task") {
-      //   completeTaskButton.textContent = "✔️";
-      // } else {
-      //   completeTaskButton.textContent = "⬜";
-      // }
+      taskTitleDiv.classList.toggle("complete-task");
+      if (taskTitleDiv.className === "task-title-div complete-task") {
+        completeTaskButton.textContent = "✔️";
+      } else {
+        completeTaskButton.textContent = "⬜";
+      }
     });
 
     const deleteTaskButton = document.createElement("button");
