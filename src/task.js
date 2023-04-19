@@ -1,3 +1,5 @@
+import Project from "./project";
+
 export default class Task extends Project {
   constructor(projectTitle, title, description, dueDate, priority) {
     super(projectTitle);
