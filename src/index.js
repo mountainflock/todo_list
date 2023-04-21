@@ -1,4 +1,4 @@
 import "./style.css";
-import { renderPage } from "./domManipulations";
+import { renderPage } from "./dM";
 
 renderPage();

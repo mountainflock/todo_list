@@ -9,6 +9,29 @@ export default class Task extends Project {
     this.priority = priority;
     this.isComplete = isComplete;
   }
+  //   setTitle(title) {
+  //     this.title = title;
+  //   }
+
+  //   getTitle() {
+  //     return this.title;
+  //   }
+
+  //   setDescription(description) {
+  //     this.description = description;
+  //   }
+
+  //   setDueDate(dueDate) {
+  //     this.dueDate = dueDate;
+  //   }
+
+  //   setPriority(priority) {
+  //     this.priority = priority;
+  //   }
+
+  //   setIsComplete(isComplete) {
+  //     this.isComplete = isComplete;
+  //   }
 }
 
 const task1 = new Task(
@@ -46,7 +69,7 @@ const task4 = new Task(
 
 export let myTasksList = [task1, task2, task3, task4];
 
-export function addNewTask(
+export function addTask(
   projectTitle,
   title,
   description,
@@ -73,8 +96,6 @@ export function changeTaskStatus(task) {
   }
 }
 
-export function removeTask(task) {
-  myTasksList = myTasksList.filter(function (tasks) {
-    return tasks !== myTasksList[task];
-  });
+export function deleteTask(task) {
+  myTasksList = myTasksList.filter((tasks) => tasks !== myTasksList[task]);
 }
