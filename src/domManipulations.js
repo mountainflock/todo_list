@@ -1,9 +1,8 @@
-import { myProjectsList, addNewProject, removeProject } from "./project";
-import { myTasksList, addNewTask, removeTask, changeTaskStatus } from "./task";
+import { myProjectsList, addProject, removeProject } from "./project";
+import { myTasksList, addTask, deleteTask, changeTaskStatus } from "./task";
 import { format } from "date-fns";
 
 const taskList = document.querySelector(".task-list");
-const projectsList = document.querySelector(".project-list");
 const formProject = document.querySelector(".new-project");
 const formTask = document.querySelector(".new-task");
 const inputs = document.querySelectorAll("input");
@@ -14,11 +13,17 @@ export function displayProjectsList() {
   for (let i = 0; i < myProjectsList.length; i++) {
     const projectDiv = document.createElement("div");
     const projectTitleDiv = document.createElement("div");
+    projectTitleDiv.classList.add("project-title-div");
     projectDiv.appendChild(projectTitleDiv);
     projectDiv.classList.add("project-item");
     projectDiv.dataset.index = `${i}`;
-    projectDiv.textContent = myProjectsList[i].projectTitle;
+    projectTitleDiv.textContent = myProjectsList[i].projectTitle;
     projectsList.appendChild(projectDiv);
+
+    projectDiv.addEventListener("click", () => {
+      taskList.textContent = "";
+      displayAllTasks();
+    });
 
     const deleteProjectDiv = document.createElement("div");
     const deleteProjectButton = document.createElement("button");
@@ -35,6 +40,11 @@ export function displayProjectsList() {
       projectsList.textContent = "";
       displayProjectsList();
     });
+
+    const editProjectButton = document.createElement("button");
+    editProjectButton.textContent = "✎";
+    editProjectButton.classList.add("edit-project-button");
+    projectDiv.insertBefore(editProjectButton, deleteProjectDiv);
   }
 }
 
@@ -84,16 +94,16 @@ export function displayAllTasks() {
 
     if (myTasksList[i].isComplete === true) {
       completeTaskButton.textContent = "✔️";
-      taskTitleDiv.classList.add("complete-task");
+      taskDiv.classList.add("complete-task");
     } else {
       completeTaskButton.textContent = "⬜";
-      taskTitleDiv.classList.remove("complete-task");
+      taskDiv.classList.remove("complete-task");
     }
 
     completeTaskButton.addEventListener("click", () => {
       changeTaskStatus(myTasksList[i]);
-      taskTitleDiv.classList.toggle("complete-task");
-      if (taskTitleDiv.className === "task-title-div complete-task") {
+      taskDiv.classList.toggle("complete-task");
+      if (taskDiv.className === "task-item complete-task") {
         completeTaskButton.textContent = "✔️";
       } else {
         completeTaskButton.textContent = "⬜";
@@ -107,9 +117,17 @@ export function displayAllTasks() {
 
     deleteTaskButton.addEventListener("click", () => {
       const taskToDelete = taskDiv.dataset.index;
-      removeTask(taskToDelete);
+      deleteTask(taskToDelete);
       taskList.textContent = "";
       displayAllTasks();
+    });
+
+    const editTaskButton = document.createElement("button");
+    editTaskButton.textContent = "✎";
+    editTaskButton.classList.add("edit-task-button");
+    taskDiv.insertBefore(editTaskButton, deleteTaskButton);
+    editTaskButton.addEventListener("click", () => {
+      editTask();
     });
   }
 }
@@ -130,13 +148,12 @@ formProject.addEventListener("submit", function (event) {
 
   if (projectTitle !== "") {
     projectsList.appendChild(newProject);
-    addNewProject(projectTitle);
+    addProject(projectTitle);
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = "";
     }
     formProject.classList.toggle("new-project-invisible");
     projectsList.textContent = "";
-    // displayAllProjectsLink();
     displayProjectsList();
   }
 });
@@ -156,13 +173,7 @@ formTask.addEventListener("submit", function (event) {
     newTask.classList.add("task-item");
     taskList.appendChild(newTask);
 
-    addNewTask(
-      taskProject,
-      taskTitle,
-      taskDescription,
-      taskDueDate,
-      taskPriority
-    );
+    addTask(taskProject, taskTitle, taskDescription, taskDueDate, taskPriority);
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = "";
     }
