@@ -43,6 +43,10 @@ body {
   width: 75%;
 }
 
+/* .active-project {
+  color: aliceblue;
+} */
+
 .project-item {
   display: flex;
   justify-content: space-between;
@@ -50,11 +54,10 @@ body {
   padding: 10px;
   letter-spacing: 1px;
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 200;
 }
 
 .all-projects {
-  font-weight: 600;
   background-color: rgb(85, 204, 182);
 }
 
@@ -113,12 +116,12 @@ body {
 }
 
 .task-title-div {
-  width: 25%;
+  width: 30%;
   align-self: flex-start;
 }
 
 .task-description-div {
-  width: 30%;
+  width: 25%;
   text-overflow: hidden;
   flex-wrap: nowrap;
 }
