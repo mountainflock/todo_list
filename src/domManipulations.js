@@ -43,6 +43,7 @@ function displayProjectsList() {
     editProjectButton.textContent = "✎";
     editProjectButton.classList.add("edit-project-button");
     projectDiv.insertBefore(editProjectButton, deleteProjectDiv);
+
     let activeProject;
 
     formProject.addEventListener("submit", function (event) {
@@ -60,6 +61,8 @@ function displayProjectsList() {
 
     projectTitleDiv.addEventListener("click", () => {
       activeProject = projectTitleDiv;
+      document.querySelector(".task-list-title").textContent =
+        activeProject.textContent;
       taskList.textContent = "";
       displayTaskList(todoList[projectTitleDiv.dataset.index]);
     });
