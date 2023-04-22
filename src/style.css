@@ -43,10 +43,6 @@ body {
   width: 75%;
 }
 
-/* .active-project {
-  color: aliceblue;
-} */
-
 .project-item {
   display: flex;
   justify-content: space-between;
@@ -138,7 +134,7 @@ body {
 input {
   border: none;
   border-radius: 4px;
-  width: 110px;
+  width: 150px;
   height: 24px;
 }
 

@@ -114,6 +114,7 @@ function displayProjectsList() {
         const dueDateDiv = document.createElement("div");
         if (projectTasksList[i].dueDate !== "") {
           const dateObject = new Date(projectTasksList[i].dueDate);
+          console.log(projectTasksList[i].dueDate);
           const dateMonth = format(dateObject, "MMM");
           const dateDay = format(dateObject, "do");
           const dateFormated = `${dateMonth} ${dateDay}`;
@@ -201,15 +202,15 @@ function displayProjectsList() {
           if (taskTitle !== "") {
             newTask.classList.add("task-item");
             taskList.appendChild(newTask);
-
             addNewTask(
               taskTitle,
               taskDescription,
-              taskDueDate,
               taskPriority,
+              taskDueDate,
               taskIsComplete,
-              todoList[projectTitleDiv.dataset.index]
+              activeProject.dataset.index
             );
+
             for (let i = 0; i < inputs.length; i++) {
               inputs[i].value = "";
             }

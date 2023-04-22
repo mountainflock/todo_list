@@ -57,39 +57,81 @@ addNewProject("Study");
 addNewProject("Home");
 addNewProject("Leisure");
 
-addNewTask("Check the mailbox", "Spam too", "Medium", "04/30", false, 0);
-addNewTask("Apply project", "Check the new ones", "High", "04/25", false, 0);
-addNewTask("Call Julia", "Ask about the report", "High", "04/22", true, 0);
-addNewTask("Make vacation plans", "Call the manager", "Low", "09/09", false, 0);
+addNewTask("Check the mailbox", "Spam too", "Medium", "2023/04/30", false, 0);
+addNewTask(
+  "Apply project",
+  "Check the new ones",
+  "High",
+  "2023/04/25",
+  false,
+  0
+);
+addNewTask("Call Julia", "Ask about the report", "High", "2023/04/22", true, 0);
+addNewTask(
+  "Make vacation plans",
+  "Call the manager",
+  "Low",
+  "2023/09/23",
+  false,
+  0
+);
 
 addNewTask(
   "Finish the to-do project",
   "Optimise code",
   "High",
-  "04/24",
+  "2023/04/24",
   false,
   1
 );
-addNewTask("Read the past conspect", "On classes", "Medium", "04/24", true, 1);
-addNewTask("Return to validation JS", "Practice", "Medium", "04/26", false, 1);
+addNewTask(
+  "Read the past conspect",
+  "On classes",
+  "Medium",
+  "2023/04/24",
+  true,
+  1
+);
+addNewTask(
+  "Return to validation JS",
+  "Practice",
+  "Medium",
+  "2023/04/26",
+  false,
+  1
+);
 
 addNewTask("Do the laundry", "White", "High", "04/23", false, 2);
-addNewTask("Mice cleaning", "Water bottle too", "Medium", "04/22", false, 2);
-addNewTask("Get the delivery", "20:00 - 22:00", "Low", "04/22", true, 2);
+addNewTask(
+  "Mice cleaning",
+  "Water bottle too",
+  "Medium",
+  "2023/04/22",
+  false,
+  2
+);
+addNewTask("Get the delivery", "20:00 - 22:00", "Low", "2023/04/22", true, 2);
 addNewTask(
   "Collect clothes for charity",
   "Check the points",
   "Low",
-  "05/25",
+  "2023/05/25",
   false,
   2
 );
-addNewTask("Watch Loro film", "On the TV screen", "Medium", "05/01", false, 3);
+addNewTask(
+  "Watch Loro film",
+  "On the TV screen",
+  "Medium",
+  "2023/05/01",
+  false,
+  3
+);
 addNewTask(
   "Watch Napoleon documentary",
   "Finish book first",
   "High",
-  "04/23",
+  "2023/04/23",
   false,
   3
 );
