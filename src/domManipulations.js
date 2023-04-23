@@ -5,6 +5,8 @@ import {
   addNewTask,
   deleteTask,
   changeTaskStatus,
+  editProjectTitle,
+  editTask,
 } from "./toDoFunctions";
 import { format } from "date-fns";
 
@@ -18,6 +20,7 @@ function displayProjectsList() {
   const formProject = document.querySelector(".new-project");
   const inputs = document.querySelectorAll("input");
   const taskList = document.querySelector(".task-list");
+  const taskListTitle = document.querySelector(".task-list-title");
 
   newProjectButton.addEventListener("click", () => {
     formProject.classList.toggle("new-project-invisible");
@@ -61,9 +64,10 @@ function displayProjectsList() {
 
     projectTitleDiv.addEventListener("click", () => {
       activeProject = projectTitleDiv;
-      document.querySelector(".task-list-title").textContent =
-        activeProject.textContent;
-      taskList.textContent = "";
+      taskListTitle.textContent = projectTitleDiv.textContent;
+      if (taskListTitle.textContent !== "✔️") {
+        taskList.textContent = "";
+      }
       displayTaskList(todoList[projectTitleDiv.dataset.index]);
     });
 
@@ -92,7 +96,39 @@ function displayProjectsList() {
       }
     }
 
-    function hanleEditProjectButton() {}
+    function hanleEditProjectButton() {
+      const projectToEdit = projectDiv.dataset.index;
+      projectTitleDiv.textContent = "";
+      const newProjectTitleForm = document.createElement("form");
+      const newProjectTitleInput = document.createElement("input");
+      newProjectTitleInput.value = todoList[i].title;
+      const confirmProjectEditButton = document.createElement("button");
+      const cancelProjectEditButton = document.createElement("button");
+
+      confirmProjectEditButton.textContent = "✔️";
+      cancelProjectEditButton.textContent = "❌";
+
+      confirmProjectEditButton.classList.add("confirm-edit-button");
+      cancelProjectEditButton.classList.add("cancel-edit-button");
+
+      newProjectTitleInput.required = true;
+
+      newProjectTitleForm.appendChild(newProjectTitleInput);
+      newProjectTitleForm.appendChild(confirmProjectEditButton);
+      newProjectTitleForm.appendChild(cancelProjectEditButton);
+      projectTitleDiv.appendChild(newProjectTitleForm);
+
+      cancelProjectEditButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        projectTitleDiv.textContent = todoList[i].title;
+      });
+
+      newProjectTitleForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        editProjectTitle(projectToEdit, newProjectTitleInput.value);
+        projectTitleDiv.textContent = todoList[i].title;
+      });
+    }
 
     function displayTaskList(project) {
       project = todoList[i];
@@ -114,33 +150,32 @@ function displayProjectsList() {
         taskDiv.dataset.index = `${i}`;
         taskTitleDiv.textContent = projectTasksList[i].title;
         taskList.appendChild(taskDiv);
-        const dueDateDiv = document.createElement("div");
+        const taskDueDateDiv = document.createElement("div");
         if (projectTasksList[i].dueDate !== "") {
           const dateObject = new Date(projectTasksList[i].dueDate);
-          console.log(projectTasksList[i].dueDate);
           const dateMonth = format(dateObject, "MMM");
           const dateDay = format(dateObject, "do");
           const dateFormated = `${dateMonth} ${dateDay}`;
-          dueDateDiv.textContent = dateFormated;
+          taskDueDateDiv.textContent = dateFormated;
         }
-        dueDateDiv.classList.add("due-date-div");
-        taskDiv.appendChild(dueDateDiv);
-        const priorityDiv = document.createElement("div");
-        priorityDiv.textContent = projectTasksList[i].priority;
-        priorityDiv.classList.add("priority-div");
+        taskDueDateDiv.classList.add("due-date-div");
+        taskDiv.appendChild(taskDueDateDiv);
+        const taskPriorityDiv = document.createElement("div");
+        taskPriorityDiv.textContent = projectTasksList[i].priority;
+        taskPriorityDiv.classList.add("priority-div");
         if (projectTasksList[i].priority === "High") {
-          priorityDiv.style.color = "#d4575d";
+          taskPriorityDiv.style.color = "#d4575d";
         } else if (projectTasksList[i].priority === "Medium") {
-          priorityDiv.style.color = "#ebb475";
+          taskPriorityDiv.style.color = "#ebb475";
         } else if (projectTasksList[i].priority === "Low") {
-          priorityDiv.style.color = "#7be8bb";
+          taskPriorityDiv.style.color = "#7be8bb";
         }
-        taskDiv.insertBefore(priorityDiv, dueDateDiv);
+        taskDiv.insertBefore(taskPriorityDiv, taskDueDateDiv);
 
         const taskDescriptionDiv = document.createElement("div");
         taskDescriptionDiv.textContent = projectTasksList[i].description;
         taskDescriptionDiv.classList.add("task-description-div");
-        taskDiv.insertBefore(taskDescriptionDiv, dueDateDiv);
+        taskDiv.insertBefore(taskDescriptionDiv, taskDueDateDiv);
 
         const completeTaskButton = document.createElement("button");
         completeTaskButton.classList.add("complete-button");
@@ -164,7 +199,7 @@ function displayProjectsList() {
         editTaskButton.classList.add("edit-task-button");
         taskDiv.insertBefore(editTaskButton, deleteTaskButton);
         editTaskButton.addEventListener("click", () => {
-          editTask();
+          handleEditTaskButton();
         });
 
         completeTaskButton.addEventListener("click", () => {
@@ -225,10 +260,108 @@ function displayProjectsList() {
 
         function handleDeleteTaskButton() {
           const taskToDelete = taskDiv.dataset.index;
-          const projectToEdit = activeProject;
-          deleteTask(projectToEdit.dataset.index, parseInt(taskToDelete));
+          const projectToModify = activeProject;
+          deleteTask(projectToModify.dataset.index, parseInt(taskToDelete));
           taskList.textContent = "";
           displayTaskList(todoList[i]);
+        }
+
+        function handleEditTaskButton() {
+          const taskToEdit = taskDiv.dataset.index;
+          taskTitleDiv.textContent = "";
+          taskDescriptionDiv.textContent = "";
+          taskPriorityDiv.textContent = "";
+          taskDueDateDiv.textContent = "";
+
+          const taskEditForm = document.createElement("form");
+          const newTaskTitleInput = document.createElement("input");
+          const newTaskDescriptionInput = document.createElement("input");
+          const newTaskPrioritySelect = document.createElement("select");
+          const newTaskDueDateInput = document.createElement("input");
+
+          const lowPriorityOption = document.createElement("option");
+          lowPriorityOption.textContent = "Low";
+          const mediumPriorityOption = document.createElement("option");
+          mediumPriorityOption.textContent = "Medium";
+          const highPriorityOption = document.createElement("option");
+          highPriorityOption.textContent = "High";
+
+          newTaskPrioritySelect.appendChild(lowPriorityOption);
+          newTaskPrioritySelect.appendChild(mediumPriorityOption);
+          newTaskPrioritySelect.appendChild(highPriorityOption);
+
+          newTaskDueDateInput.type = "date";
+
+          taskEditForm.appendChild(newTaskTitleInput);
+          taskEditForm.appendChild(newTaskDescriptionInput);
+          taskEditForm.appendChild(newTaskPrioritySelect);
+          taskEditForm.appendChild(newTaskDueDateInput);
+
+          taskTitleDiv.classList.toggle("editing-task");
+          taskDescriptionDiv.style.width = "0%";
+          taskPriorityDiv.style.width = "0%";
+          taskDueDateDiv.style.width = "0%";
+
+          taskTitleDiv.appendChild(taskEditForm);
+
+          newTaskTitleInput.value = projectTasksList[i].title;
+          newTaskDescriptionInput.value = projectTasksList[i].description;
+          newTaskPrioritySelect.value = projectTasksList[i].priority;
+          newTaskDueDateInput.value = projectTasksList[i].dueDate;
+
+          const confirmTaskEditButton = document.createElement("button");
+          const cancelTaskEditButton = document.createElement("button");
+          confirmTaskEditButton.textContent = "✔️";
+          cancelTaskEditButton.textContent = "❌";
+
+          confirmTaskEditButton.classList.add("confirm-edit-button");
+          cancelTaskEditButton.classList.add("cancel-edit-button");
+
+          newTaskTitleInput.required = true;
+
+          taskEditForm.appendChild(confirmTaskEditButton);
+          taskEditForm.appendChild(cancelTaskEditButton);
+
+          cancelTaskEditButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            taskTitleDiv.style.width = "30%";
+            taskDescriptionDiv.style.width = "25%";
+            taskPriorityDiv.style.width = "10%";
+            taskDueDateDiv.style.width = "15%";
+            taskTitleDiv.textContent = projectTasksList[i].title;
+            taskDescriptionDiv.textContent = projectTasksList[i].description;
+            taskPriorityDiv.textContent = projectTasksList[i].priority;
+            if (projectTasksList[i].dueDate !== "") {
+              const dateObject = new Date(projectTasksList[i].dueDate);
+              const dateMonth = format(dateObject, "MMM");
+              const dateDay = format(dateObject, "do");
+              const dateFormated = `${dateMonth} ${dateDay}`;
+              taskDueDateDiv.textContent = dateFormated;
+            }
+          });
+
+          taskEditForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            console.log(activeProject);
+
+            editTask(
+              activeProject.dataset.index,
+              taskToEdit,
+              newTaskTitleInput.value,
+              newTaskDescriptionInput.value,
+              newTaskPrioritySelect.value,
+              newTaskDueDateInput.value
+            );
+            console.log(activeProject);
+            taskTitleDiv.textContent = projectTasksList[i].title;
+            taskDescriptionDiv.textContent = projectTasksList[i].description;
+            taskPriorityDiv.textContent = projectTasksList[i].priority;
+            taskDueDateDiv.textContent = projectTasksList[i].dueDate;
+            taskTitleDiv.style.width = "30%";
+            taskDescriptionDiv.style.width = "25%";
+            taskPriorityDiv.style.width = "10%";
+            taskDueDateDiv.style.width = "15%";
+          });
         }
       }
     }

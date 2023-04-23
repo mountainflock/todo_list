@@ -19,7 +19,7 @@ body {
 .projects {
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 28%;
   padding: 40px;
   font-size: 24px;
   gap: 20px;
@@ -35,7 +35,7 @@ body {
 .project-title {
   border: none;
   border-radius: 4px;
-  width: 56%;
+  width: 60%;
   height: 24px;
 }
 
@@ -77,11 +77,16 @@ body {
 .tasks {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 72%;
   padding: 40px;
   font-size: 24px;
   font-weight: 400;
   gap: 20px;
+}
+
+.task-list-title {
+  font-size: 28px;
+  color: rgb(72, 149, 149);
 }
 
 .tasks-list {
@@ -96,6 +101,18 @@ body {
 .complete-button,
 .new-task-button {
   background-color: rgb(251, 251, 207);
+}
+
+.confirm-edit-button,
+.cancel-edit-button {
+  border: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 4px;
+  align-self: center;
+  margin: 0 4px;
+  background-color: inherit;
+  text-align: center;
 }
 
 .projects,
@@ -116,6 +133,13 @@ body {
   align-self: flex-start;
 }
 
+.editing-task {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
 .task-description-div {
   width: 25%;
   text-overflow: hidden;
@@ -134,7 +158,7 @@ body {
 input {
   border: none;
   border-radius: 4px;
-  width: 150px;
+  width: 120px;
   height: 24px;
 }
 
@@ -158,6 +182,7 @@ select {
   flex-wrap: wrap;
   font-size: 14px;
   padding: 10px 0;
+  gap: 5px;
 }
 
 .new-task-invisible {

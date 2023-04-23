@@ -52,6 +52,24 @@ export function changeTaskStatus(project, task) {
   }
 }
 
+export function editProjectTitle(project, newTitle) {
+  todoList[project].title = newTitle;
+}
+
+export function editTask(
+  project,
+  task,
+  newTitle,
+  newDescription,
+  newPriority,
+  newDueDate
+) {
+  todoList[project].tasks[task].title = newTitle;
+  todoList[project].tasks[task].description = newDescription;
+  todoList[project].tasks[task].priority = newPriority;
+  todoList[project].tasks[task].dueDate = newDueDate;
+}
+
 addNewProject("Work");
 addNewProject("Study");
 addNewProject("Home");
@@ -59,7 +77,7 @@ addNewProject("Leisure");
 
 addNewTask("Check the mailbox", "Spam too", "Medium", "2023/04/30", false, 0);
 addNewTask(
-  "Apply project",
+  "Apply project change",
   "Check the new ones",
   "High",
   "2023/04/25",
@@ -128,7 +146,7 @@ addNewTask(
   3
 );
 addNewTask(
-  "Watch Napoleon documentary",
+  "Watch Napoleon film",
   "Finish book first",
   "High",
   "2023/04/23",
