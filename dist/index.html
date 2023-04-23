@@ -46,7 +46,7 @@
           <input
             type="text"
             class="task-title"
-            maxlength="20"
+            maxlength="25"
             placeholder="Title"
             required
           />
@@ -54,17 +54,17 @@
           <input
             type="text"
             class="task-description"
-            maxlength="20"
+            maxlength="30"
             placeholder="Description"
           />
-          <label for="dueDate">Due date:</label>
-          <input type="date" class="task-due-date" />
           <label for="priority">Priority:</label>
           <select name="Priority" id="task-priority">
             <option value="Low" checked>Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
+          <label for="dueDate">Due date:</label>
+          <input type="date" class="task-due-date" />
           <button type="submit" class="to-do-submit">ADD</button>
         </form>
       </div>
