@@ -5,7 +5,7 @@ import {
   addNewTask,
   deleteTask,
   changeTaskStatus,
-  editProjectTitle,
+  renameProject,
   editTask,
 } from "./toDoFunctions";
 import { format } from "date-fns";
@@ -15,7 +15,7 @@ export function renderPage() {
 }
 
 function displayProjectsList() {
-  const projectsList = document.querySelector(".project-list");
+  const projectList = document.querySelector(".project-list");
   const newProjectButton = document.querySelector(".new-project-button");
   const formProject = document.querySelector(".new-project");
   const inputs = document.querySelectorAll("input");
@@ -28,13 +28,15 @@ function displayProjectsList() {
   for (let i = 0; i < todoList.length; i++) {
     const projectDiv = document.createElement("div");
     const projectTitleDiv = document.createElement("div");
+
     projectTitleDiv.classList.add("project-title-div");
     projectDiv.appendChild(projectTitleDiv);
     projectDiv.classList.add("project-item");
     projectDiv.dataset.index = `${i}`;
     projectTitleDiv.textContent = todoList[i].title;
     projectTitleDiv.dataset.index = `${i}`;
-    projectsList.appendChild(projectDiv);
+    projectList.appendChild(projectDiv);
+
     const deleteProjectDiv = document.createElement("div");
     const deleteProjectButton = document.createElement("button");
     deleteProjectButton.classList.add("delete-project-button");
@@ -42,12 +44,11 @@ function displayProjectsList() {
     deleteProjectButton.textContent = "🗑️";
     deleteProjectDiv.appendChild(deleteProjectButton);
     projectDiv.appendChild(deleteProjectDiv);
+
     const editProjectButton = document.createElement("button");
     editProjectButton.textContent = "✎";
     editProjectButton.classList.add("edit-project-button");
     projectDiv.insertBefore(editProjectButton, deleteProjectDiv);
-
-    let activeProject;
 
     formProject.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -63,19 +64,15 @@ function displayProjectsList() {
     });
 
     projectTitleDiv.addEventListener("click", () => {
-      activeProject = projectTitleDiv;
-      taskListTitle.textContent = todoList[activeProject.dataset.index].title;
-      if (taskListTitle.textContent !== "✔️") {
-        taskList.textContent = "";
-      }
-      displayTaskList(todoList[projectTitleDiv.dataset.index]);
+      taskList.textContent = "";
+      displayTaskList();
     });
 
     function handleDeleteProjectButton() {
       const projectToDelete = projectDiv.dataset.index;
       deleteProject(projectToDelete);
-      projectsList.removeChild(projectDiv);
-      projectsList.textContent = "";
+      projectList.removeChild(projectDiv);
+      projectList.textContent = "";
       displayProjectsList();
     }
 
@@ -85,19 +82,21 @@ function displayProjectsList() {
       newProject.classList.add("project-item");
 
       if (projectTitle !== "") {
-        projectsList.appendChild(newProject);
+        projectList.appendChild(newProject);
         addNewProject(projectTitle);
         for (let i = 0; i < inputs.length; i++) {
           inputs[i].value = "";
         }
         formProject.classList.toggle("new-project-invisible");
-        projectsList.textContent = "";
+        projectList.textContent = "";
         displayProjectsList();
       }
     }
 
     function hanleEditProjectButton() {
       const projectToEdit = projectDiv.dataset.index;
+      taskList.textContent = "";
+      displayTaskList();
       projectTitleDiv.textContent = "";
       const newProjectTitleForm = document.createElement("form");
       const newProjectTitleInput = document.createElement("input");
@@ -125,14 +124,17 @@ function displayProjectsList() {
 
       newProjectTitleForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        editProjectTitle(projectToEdit, newProjectTitleInput.value);
-        projectTitleDiv.textContent = todoList[i].title;
-        taskListTitle.textContent = todoList[activeProject.dataset.index].title;
+        renameProject(projectToEdit, newProjectTitleInput.value);
+        taskList.textContent = "";
+        projectList.textContent = "";
+        displayProjectsList();
+        displayTaskList();
       });
     }
 
-    function displayTaskList(project) {
-      project = todoList[i];
+    function displayTaskList() {
+      const project = todoList[i];
+      taskListTitle.textContent = project.title;
       const taskList = document.querySelector(".task-list");
       const formTask = document.querySelector(".new-task");
       const inputs = document.querySelectorAll("input");
@@ -217,9 +219,9 @@ function displayProjectsList() {
         });
 
         function handleChangeStatusButton() {
-          const projectToEdit = activeProject;
-          const taskToEdit = taskDiv.dataset.index;
-          changeTaskStatus(projectToEdit.dataset.index, parseInt(taskToEdit));
+          const projectToEdit = projectTitleDiv.dataset.index;
+          const taskToEdit = parseInt(taskDiv.dataset.index);
+          changeTaskStatus(projectToEdit, taskToEdit);
           taskDiv.classList.toggle("complete-task");
           if (taskDiv.className === "task-item complete-task") {
             completeTaskButton.textContent = "✔️";
@@ -247,7 +249,7 @@ function displayProjectsList() {
               taskPriority,
               taskDueDate,
               taskIsComplete,
-              activeProject.dataset.index
+              projectTitleDiv.dataset.index
             );
 
             for (let i = 0; i < inputs.length; i++) {
@@ -255,19 +257,20 @@ function displayProjectsList() {
             }
             formTask.classList.add("new-task-invisible");
             taskList.textContent = "";
-            displayTaskList(todoList[i]);
+            displayTaskList();
           }
         }
 
         function handleDeleteTaskButton() {
           const taskToDelete = taskDiv.dataset.index;
-          const projectToModify = activeProject;
+          const projectToModify = projectTitleDiv;
           deleteTask(projectToModify.dataset.index, parseInt(taskToDelete));
           taskList.textContent = "";
-          displayTaskList(todoList[i]);
+          displayTaskList();
         }
 
         function handleEditTaskButton() {
+          editTaskButton.style.display = "none";
           const taskToEdit = taskDiv.dataset.index;
           taskTitleDiv.textContent = "";
           taskDescriptionDiv.textContent = "";
@@ -275,6 +278,7 @@ function displayProjectsList() {
           taskDueDateDiv.textContent = "";
 
           const taskEditForm = document.createElement("form");
+          taskEditForm.classList.add("task-edit-form");
           const newTaskTitleInput = document.createElement("input");
           const newTaskDescriptionInput = document.createElement("input");
           const newTaskPrioritySelect = document.createElement("select");
@@ -326,13 +330,13 @@ function displayProjectsList() {
           cancelTaskEditButton.addEventListener("click", (event) => {
             event.preventDefault();
             taskList.textContent = "";
-            displayTaskList(activeProject);
+            displayTaskList();
           });
 
           taskEditForm.addEventListener("submit", (event) => {
             event.preventDefault();
             editTask(
-              activeProject.dataset.index,
+              projectTitleDiv.dataset.index,
               taskToEdit,
               newTaskTitleInput.value,
               newTaskDescriptionInput.value,
@@ -340,7 +344,7 @@ function displayProjectsList() {
               newTaskDueDateInput.value
             );
             taskList.textContent = "";
-            displayTaskList(activeProject);
+            displayTaskList();
           });
         }
       }
