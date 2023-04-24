@@ -23,10 +23,10 @@ export function addNewTask(
   priority,
   dueDate,
   isComplete,
-  index
+  project
 ) {
   const task = new Task(title, description, priority, dueDate, isComplete);
-  todoList[index].tasks.push(task);
+  todoList[project].tasks.push(task);
 }
 
 export function addNewProject(title) {
@@ -45,14 +45,15 @@ export function deleteTask(project, task) {
 }
 
 export function changeTaskStatus(project, task) {
-  if (todoList[project].tasks[task].isComplete === true) {
-    todoList[project].tasks[task].isComplete = false;
+  const taskToStatusChange = todoList[project].tasks[task];
+  if (taskToStatusChange.isComplete === true) {
+    taskToStatusChange.isComplete = false;
   } else {
-    todoList[project].tasks[task].isComplete = true;
+    taskToStatusChange.isComplete = true;
   }
 }
 
-export function editProjectTitle(project, newTitle) {
+export function renameProject(project, newTitle) {
   todoList[project].title = newTitle;
 }
 
@@ -64,10 +65,11 @@ export function editTask(
   newPriority,
   newDueDate
 ) {
-  todoList[project].tasks[task].title = newTitle;
-  todoList[project].tasks[task].description = newDescription;
-  todoList[project].tasks[task].priority = newPriority;
-  todoList[project].tasks[task].dueDate = newDueDate;
+  const taskToEdit = todoList[project].tasks[task];
+  taskToEdit.title = newTitle;
+  taskToEdit.description = newDescription;
+  taskToEdit.priority = newPriority;
+  taskToEdit.dueDate = newDueDate;
 }
 
 addNewProject("Work");

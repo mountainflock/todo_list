@@ -46,6 +46,7 @@ body {
 .project-item {
   display: flex;
   justify-content: space-between;
+  height: 30px;
   background-color: rgb(192, 235, 227);
   padding: 10px;
   letter-spacing: 1px;
@@ -115,6 +116,16 @@ body {
   text-align: center;
 }
 
+.confirm-edit-button:hover,
+.cancel-edit-button:hover {
+  font-size: 16px;
+}
+
+.project-submit:active,
+.to-do-submit:active {
+  font-size: 17px;
+}
+
 .projects,
 .delete-project-button,
 .new-project-button {
@@ -134,10 +145,17 @@ body {
 }
 
 .editing-task {
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   gap: 5px;
+}
+
+.task-edit-form {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  gap: 7px;
 }
 
 .task-description-div {
@@ -158,7 +176,7 @@ body {
 input {
   border: none;
   border-radius: 4px;
-  width: 120px;
+  width: 130px;
   height: 24px;
 }
 
@@ -300,4 +318,14 @@ select {
   border: none;
   border-radius: 4px;
   background-color: rgb(85, 204, 182);
+}
+
+.project-submit:hover,
+.to-do-submit:hover {
+  background-color: rgb(74, 191, 169);
+}
+
+.project-submit:active,
+.to-do-submit:active {
+  background-color: rgb(70, 180, 160);
 }
