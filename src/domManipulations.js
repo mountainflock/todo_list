@@ -64,7 +64,7 @@ function displayProjectsList() {
 
     projectTitleDiv.addEventListener("click", () => {
       activeProject = projectTitleDiv;
-      taskListTitle.textContent = projectTitleDiv.textContent;
+      taskListTitle.textContent = todoList[activeProject.dataset.index].title;
       if (taskListTitle.textContent !== "✔️") {
         taskList.textContent = "";
       }
@@ -127,6 +127,7 @@ function displayProjectsList() {
         event.preventDefault();
         editProjectTitle(projectToEdit, newProjectTitleInput.value);
         projectTitleDiv.textContent = todoList[i].title;
+        taskListTitle.textContent = todoList[activeProject.dataset.index].title;
       });
     }
 
@@ -298,9 +299,9 @@ function displayProjectsList() {
           taskEditForm.appendChild(newTaskDueDateInput);
 
           taskTitleDiv.classList.toggle("editing-task");
-          taskDescriptionDiv.style.width = "0%";
-          taskPriorityDiv.style.width = "0%";
-          taskDueDateDiv.style.width = "0%";
+          taskDiv.removeChild(taskDescriptionDiv);
+          taskDiv.removeChild(taskPriorityDiv);
+          taskDiv.removeChild(taskDueDateDiv);
 
           taskTitleDiv.appendChild(taskEditForm);
 
@@ -324,26 +325,12 @@ function displayProjectsList() {
 
           cancelTaskEditButton.addEventListener("click", (event) => {
             event.preventDefault();
-            taskTitleDiv.style.width = "30%";
-            taskDescriptionDiv.style.width = "25%";
-            taskPriorityDiv.style.width = "10%";
-            taskDueDateDiv.style.width = "15%";
-            taskTitleDiv.textContent = projectTasksList[i].title;
-            taskDescriptionDiv.textContent = projectTasksList[i].description;
-            taskPriorityDiv.textContent = projectTasksList[i].priority;
-            if (projectTasksList[i].dueDate !== "") {
-              const dateObject = new Date(projectTasksList[i].dueDate);
-              const dateMonth = format(dateObject, "MMM");
-              const dateDay = format(dateObject, "do");
-              const dateFormated = `${dateMonth} ${dateDay}`;
-              taskDueDateDiv.textContent = dateFormated;
-            }
+            taskList.textContent = "";
+            displayTaskList(activeProject);
           });
 
           taskEditForm.addEventListener("submit", (event) => {
             event.preventDefault();
-            console.log(activeProject);
-
             editTask(
               activeProject.dataset.index,
               taskToEdit,
@@ -352,15 +339,8 @@ function displayProjectsList() {
               newTaskPrioritySelect.value,
               newTaskDueDateInput.value
             );
-            console.log(activeProject);
-            taskTitleDiv.textContent = projectTasksList[i].title;
-            taskDescriptionDiv.textContent = projectTasksList[i].description;
-            taskPriorityDiv.textContent = projectTasksList[i].priority;
-            taskDueDateDiv.textContent = projectTasksList[i].dueDate;
-            taskTitleDiv.style.width = "30%";
-            taskDescriptionDiv.style.width = "25%";
-            taskPriorityDiv.style.width = "10%";
-            taskDueDateDiv.style.width = "15%";
+            taskList.textContent = "";
+            displayTaskList(activeProject);
           });
         }
       }
