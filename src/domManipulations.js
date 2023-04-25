@@ -11,12 +11,13 @@ import {
 import { format } from "date-fns";
 
 export function renderPage() {
-  displayProjectsList();
+  displayProjectList();
 }
 
-function displayProjectsList() {
+function displayProjectList() {
   const projectList = document.querySelector(".project-list");
   const newProjectButton = document.querySelector(".new-project-button");
+  const newTaskButton = document.querySelector(".new-task-button");
   const formProject = document.querySelector(".new-project");
   const inputs = document.querySelectorAll("input");
   const taskList = document.querySelector(".task-list");
@@ -46,7 +47,11 @@ function displayProjectsList() {
     projectDiv.appendChild(deleteProjectDiv);
 
     const editProjectButton = document.createElement("button");
-    editProjectButton.textContent = "✎";
+    const editButtonText = document.createElement("span");
+    editButtonText.textContent = "edit";
+    editButtonText.style.color = "grey";
+    editButtonText.classList.add("material-icons");
+    editProjectButton.appendChild(editButtonText);
     editProjectButton.classList.add("edit-project-button");
     projectDiv.insertBefore(editProjectButton, deleteProjectDiv);
 
@@ -64,16 +69,15 @@ function displayProjectsList() {
     });
 
     projectTitleDiv.addEventListener("click", () => {
-      taskList.textContent = "";
-      displayTaskList();
+      newTaskButton.classList.remove("new-task-button-invisible");
+      updateTaskList();
     });
 
     function handleDeleteProjectButton() {
       const projectToDelete = projectDiv.dataset.index;
       deleteProject(projectToDelete);
       projectList.removeChild(projectDiv);
-      projectList.textContent = "";
-      displayProjectsList();
+      updateProjectList();
     }
 
     function handleNewProjecFormSubmit() {
@@ -88,15 +92,13 @@ function displayProjectsList() {
           inputs[i].value = "";
         }
         formProject.classList.toggle("new-project-invisible");
-        projectList.textContent = "";
-        displayProjectsList();
+        updateProjectList();
       }
     }
 
     function hanleEditProjectButton() {
       const projectToEdit = projectDiv.dataset.index;
-      taskList.textContent = "";
-      displayTaskList();
+      updateTaskList();
       projectTitleDiv.textContent = "";
       const newProjectTitleForm = document.createElement("form");
       const newProjectTitleInput = document.createElement("input");
@@ -125,37 +127,47 @@ function displayProjectsList() {
       newProjectTitleForm.addEventListener("submit", (event) => {
         event.preventDefault();
         renameProject(projectToEdit, newProjectTitleInput.value);
-        taskList.textContent = "";
-        projectList.textContent = "";
-        displayProjectsList();
-        displayTaskList();
+        updateProjectList();
+        updateTaskList();
       });
     }
 
-    function displayTaskList() {
-      const project = todoList[i];
+    function updateTaskList() {
+      taskList.textContent = "";
+      displayTaskList(i);
+    }
+
+    function updateProjectList() {
+      projectList.textContent = "";
+      displayProjectList();
+    }
+
+    function displayTaskList(projectListIndex) {
+      const project = todoList[projectListIndex];
       taskListTitle.textContent = project.title;
       const taskList = document.querySelector(".task-list");
       const formTask = document.querySelector(".new-task");
       const inputs = document.querySelectorAll("input");
       const newTaskButton = document.querySelector(".new-task-button");
+
       newTaskButton.addEventListener("click", () => {
         formTask.classList.toggle("new-task-invisible");
       });
+
       const projectTasksList = project.tasks;
 
-      for (let i = 0; i < projectTasksList.length; i++) {
+      for (let j = 0; j < projectTasksList.length; j++) {
         const taskDiv = document.createElement("div");
         const taskTitleDiv = document.createElement("div");
         taskTitleDiv.classList.add("task-title-div");
         taskDiv.appendChild(taskTitleDiv);
         taskDiv.classList.add("task-item");
-        taskDiv.dataset.index = `${i}`;
-        taskTitleDiv.textContent = projectTasksList[i].title;
+        taskDiv.dataset.index = `${j}`;
+        taskTitleDiv.textContent = projectTasksList[j].title;
         taskList.appendChild(taskDiv);
         const taskDueDateDiv = document.createElement("div");
-        if (projectTasksList[i].dueDate !== "") {
-          const dateObject = new Date(projectTasksList[i].dueDate);
+        if (projectTasksList[j].dueDate !== "") {
+          const dateObject = new Date(projectTasksList[j].dueDate);
           const dateMonth = format(dateObject, "MMM");
           const dateDay = format(dateObject, "do");
           const dateFormated = `${dateMonth} ${dateDay}`;
@@ -164,27 +176,27 @@ function displayProjectsList() {
         taskDueDateDiv.classList.add("due-date-div");
         taskDiv.appendChild(taskDueDateDiv);
         const taskPriorityDiv = document.createElement("div");
-        taskPriorityDiv.textContent = projectTasksList[i].priority;
+        taskPriorityDiv.textContent = projectTasksList[j].priority;
         taskPriorityDiv.classList.add("priority-div");
-        if (projectTasksList[i].priority === "High") {
+        if (projectTasksList[j].priority === "High") {
           taskPriorityDiv.style.color = "#d4575d";
-        } else if (projectTasksList[i].priority === "Medium") {
+        } else if (projectTasksList[j].priority === "Medium") {
           taskPriorityDiv.style.color = "#ebb475";
-        } else if (projectTasksList[i].priority === "Low") {
+        } else if (projectTasksList[j].priority === "Low") {
           taskPriorityDiv.style.color = "#7be8bb";
         }
         taskDiv.insertBefore(taskPriorityDiv, taskDueDateDiv);
 
         const taskDescriptionDiv = document.createElement("div");
-        taskDescriptionDiv.textContent = projectTasksList[i].description;
+        taskDescriptionDiv.textContent = projectTasksList[j].description;
         taskDescriptionDiv.classList.add("task-description-div");
-        taskDiv.insertBefore(taskDescriptionDiv, taskDueDateDiv);
+        taskDiv.insertBefore(taskDescriptionDiv, taskPriorityDiv);
 
         const completeTaskButton = document.createElement("button");
         completeTaskButton.classList.add("complete-button");
         taskDiv.insertBefore(completeTaskButton, taskTitleDiv);
 
-        if (projectTasksList[i].isComplete === true) {
+        if (projectTasksList[j].isComplete === true) {
           completeTaskButton.textContent = "✔️";
           taskDiv.classList.add("complete-task");
         } else {
@@ -256,8 +268,7 @@ function displayProjectsList() {
               inputs[i].value = "";
             }
             formTask.classList.add("new-task-invisible");
-            taskList.textContent = "";
-            displayTaskList();
+            updateTaskList();
           }
         }
 
@@ -265,8 +276,7 @@ function displayProjectsList() {
           const taskToDelete = taskDiv.dataset.index;
           const projectToModify = projectTitleDiv;
           deleteTask(projectToModify.dataset.index, parseInt(taskToDelete));
-          taskList.textContent = "";
-          displayTaskList();
+          updateTaskList();
         }
 
         function handleEditTaskButton() {
@@ -309,10 +319,10 @@ function displayProjectsList() {
 
           taskTitleDiv.appendChild(taskEditForm);
 
-          newTaskTitleInput.value = projectTasksList[i].title;
-          newTaskDescriptionInput.value = projectTasksList[i].description;
-          newTaskPrioritySelect.value = projectTasksList[i].priority;
-          newTaskDueDateInput.value = projectTasksList[i].dueDate;
+          newTaskTitleInput.value = projectTasksList[j].title;
+          newTaskDescriptionInput.value = projectTasksList[j].description;
+          newTaskPrioritySelect.value = projectTasksList[j].priority;
+          newTaskDueDateInput.value = projectTasksList[j].dueDate;
 
           const confirmTaskEditButton = document.createElement("button");
           const cancelTaskEditButton = document.createElement("button");
@@ -329,8 +339,7 @@ function displayProjectsList() {
 
           cancelTaskEditButton.addEventListener("click", (event) => {
             event.preventDefault();
-            taskList.textContent = "";
-            displayTaskList();
+            updateTaskList();
           });
 
           taskEditForm.addEventListener("submit", (event) => {
@@ -343,11 +352,11 @@ function displayProjectsList() {
               newTaskPrioritySelect.value,
               newTaskDueDateInput.value
             );
-            taskList.textContent = "";
-            displayTaskList();
+            updateTaskList();
           });
         }
       }
     }
+    // displayTaskList(0);
   }
 }
