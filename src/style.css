@@ -1,7 +1,7 @@
 body {
   margin: 20px 80px;
   font-family: "Source Sans 3", sans-serif;
-  background-color: rgb(231, 248, 239);
+  background-color: rgb(127, 179, 170);
   color: rgb(37, 37, 37);
 }
 
@@ -233,12 +233,16 @@ select {
   padding: 1px;
 }
 
-.delete-project-button:hover {
-  font-size: 18px;
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 24;
 }
 
-.delete-project-button:active {
-  font-size: 19px;
+.material-symbols-outlined:hover {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+.material-symbols-outlined:active {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 .new-task-button:hover {
