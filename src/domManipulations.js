@@ -15,45 +15,35 @@ export function renderPage() {
 }
 
 let activeProject;
+const projectList = document.querySelector(".project-list");
+const newProjectButton = document.querySelector(".new-project-button");
 
 function displayProjectList() {
   addNewProjectButton();
   for (let i = 0; i < todoList.length; i++) {
-    const projectList = document.querySelector(".project-list");
     const projectDiv = document.createElement("div");
-    projectDiv.dataset.index = `${i}`;
+    const projectTitleDiv = document.createElement("div");
+    projectTitleDiv.classList.add("project-title-div");
     projectDiv.classList.add("project-item");
     projectList.appendChild(projectDiv);
-    createProjectItem();
+    projectTitleDiv.dataset.index = `${i}`;
+    projectDiv.dataset.index = `${i}`;
+    projectDiv.appendChild(projectTitleDiv);
+    const project = todoList[projectTitleDiv.dataset.index];
+    projectTitleDiv.textContent = project.title;
+    projectTitleDiv.addEventListener("click", () => {
+      updateTaskList();
+    });
+    projectDiv.addEventListener("click", () => {
+      activeProject = projectDiv.dataset.index;
+      return activeProject;
+    });
+    addEditProjectButton(projectDiv);
+    addDeleteProjectButton(projectDiv);
   }
 }
 
-function createProjectItem() {
-  const projectDivs = document.querySelectorAll(".project-item");
-  const projectTitleDiv = document.createElement("div");
-  projectTitleDiv.classList.add("project-title-div");
-  projectDivs.forEach((projectDiv) => {
-    const project = todoList[projectDiv.dataset.index];
-    projectDiv.appendChild(projectTitleDiv);
-    projectTitleDiv.textContent = project.title;
-    // const projectIndex = todoList[projectDiv.dataset.index];
-    // console.log(projectIndex);
-    // projectDiv.addEventListener("click", () => {
-    // return projectIndex;
-    // });
-    return project;
-  });
-
-  addEditProjectButton();
-  addDeleteProjectButton();
-
-  projectTitleDiv.addEventListener("click", () => {
-    updateTaskList();
-  });
-}
-
-function addEditProjectButton() {
-  const projectDivs = document.querySelectorAll(".project-item");
+function addEditProjectButton(projectDiv) {
   const editProjectButton = document.createElement("button");
   const editButtonText = document.createElement("span");
 
@@ -63,20 +53,14 @@ function addEditProjectButton() {
   editProjectButton.appendChild(editButtonText);
   editProjectButton.classList.add("edit-project-button");
 
-  projectDivs.forEach((projectDiv) =>
-    projectDiv.appendChild(editProjectButton)
-  );
+  projectDiv.appendChild(editProjectButton);
 
   editProjectButton.addEventListener("click", () => {
-    projectDivs.forEach((projectDiv) => {
-      const project = todoList[projectDiv.dataset.index];
-      hanleEditProjectButton(project);
-    });
+    hanleEditProjectButton(projectDiv.dataset.index);
   });
 }
 
-function addDeleteProjectButton() {
-  const projectDivs = document.querySelectorAll(".project-item");
+function addDeleteProjectButton(projectDiv) {
   const deleteProjectDiv = document.createElement("div");
   const deleteProjectButton = document.createElement("button");
   const deleteButtonText = document.createElement("span");
@@ -89,22 +73,23 @@ function addDeleteProjectButton() {
   deleteProjectButton.appendChild(deleteButtonText);
   deleteProjectDiv.appendChild(deleteProjectButton);
 
-  projectDivs.forEach((projectDiv) =>
-    projectDiv.appendChild(deleteProjectButton)
-  );
+  projectDiv.appendChild(deleteProjectButton);
 
   deleteProjectButton.addEventListener("click", () => {
-    handleDeleteProjectButton();
+    handleDeleteProjectButton(projectDiv);
   });
 }
 
-function hanleEditProjectButton(project) {
-  const projectDiv = document.querySelector(".project-item");
-  const projectDivs = document.querySelectorAll(".project-item");
-  const projectList = document.querySelector(".project-list");
+function hanleEditProjectButton(activeProject) {
+  const projectTitleDivs = document.querySelectorAll(".project-title-div");
+  const projectTitleDiv = projectTitleDivs[activeProject];
+
+  projectTitleDiv.textContent = "";
+
   const newProjectTitleForm = document.createElement("form");
   const newProjectTitleInput = document.createElement("input");
-  newProjectTitleInput.value = project.title;
+
+  newProjectTitleInput.value = todoList[activeProject].title;
   const confirmProjectEditButton = document.createElement("button");
   const cancelProjectEditButton = document.createElement("button");
 
@@ -119,30 +104,29 @@ function hanleEditProjectButton(project) {
   newProjectTitleForm.appendChild(newProjectTitleInput);
   newProjectTitleForm.appendChild(confirmProjectEditButton);
   newProjectTitleForm.appendChild(cancelProjectEditButton);
-  // projectTitleDiv.appendChild(newProjectTitleForm);
+  projectTitleDiv.appendChild(newProjectTitleForm);
 
   cancelProjectEditButton.addEventListener("click", (event) => {
     event.preventDefault();
-    projectTitleDiv.textContent = todoList[i].title;
+    projectTitleDiv.textContent = todoList[activeProject].title;
   });
 
   newProjectTitleForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    renameProject(activeProject, newProjectTitleInput.value);
+    renameProject(projectTitleDiv.dataset.index, newProjectTitleInput.value);
     updateProjectList();
     updateTaskList();
   });
 }
 
-function handleDeleteProjectButton() {
-  deleteProject(activeProject);
+function handleDeleteProjectButton(projectDiv) {
+  deleteProject(parseInt(projectDiv.dataset.index));
   projectList.removeChild(projectDiv);
   updateProjectList();
 }
 
 function addNewProjectButton() {
   const formProject = document.querySelector(".new-project");
-  const newProjectButton = document.querySelector(".new-project-button");
   newProjectButton.addEventListener("click", () => {
     formProject.classList.toggle("new-project-invisible");
     handlNewProjectButton();
