@@ -54,6 +54,14 @@ body {
   font-weight: 200;
 }
 
+.new-project-title-input {
+  border: none;
+  border-radius: 4px;
+  width: 130px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
 .all-projects {
   background-color: rgb(85, 204, 182);
 }
@@ -159,8 +167,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-self: flex-start;
-  gap: 10px;
+  gap: 16px;
 }
 
 .task-description-div {
@@ -181,8 +188,8 @@ body {
 input {
   border: none;
   border-radius: 4px;
-  width: 130px;
-  height: 24px;
+  font-family: inherit;
+  font-size: 14px;
 }
 
 select {
@@ -246,7 +253,7 @@ select {
 }
 
 .material-symbols-outlined:hover {
-  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 .material-symbols-outlined:active {
@@ -340,4 +347,9 @@ select {
 .project-submit:active,
 .to-do-submit:active {
   background-color: rgb(70, 180, 160);
+}
+
+.new-task-title-input,
+.new-task-description-input {
+  width: 180px;
 }

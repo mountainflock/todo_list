@@ -45,6 +45,7 @@ function addNewTaskButton() {
   const newTaskButton = document.querySelector(".new-task-button");
 
   newTaskButton.addEventListener("click", () => {
+    updateTaskList(activeProject);
     formTask.classList.toggle("new-task-invisible");
   });
 
@@ -162,6 +163,8 @@ function createEditTaskButton(taskDiv) {
   taskDiv.appendChild(editTaskButton);
 
   editTaskButton.addEventListener("click", () => {
+    const formTask = document.querySelector(".new-task");
+    formTask.classList.add("new-task-invisible");
     updateTaskList(activeProject);
     handleEditTaskButton(taskDiv);
   });
@@ -169,7 +172,6 @@ function createEditTaskButton(taskDiv) {
 
 function createDeleteTaskButton(taskDiv) {
   const deleteTaskButton = document.createElement("button");
-  deleteTaskButton.classList.add("delete-task-button");
   const deleteButtonText = document.createElement("span");
 
   deleteButtonText.textContent = "delete";
@@ -236,10 +238,10 @@ function createTaskEditForm(taskDiv) {
   const deleteTaskButton = document.querySelectorAll(".delete-task-button");
 
   const newTaskTitleInput = document.createElement("input");
-  newTaskTitleInput.classList.add(".new-task-title-input");
+  newTaskTitleInput.classList.add("new-task-title-input");
   const newTaskDescriptionInput = document.createElement("input");
+  newTaskDescriptionInput.classList.add("new-task-description-input");
   const newTaskPrioritySelect = document.createElement("select");
-  newTaskPrioritySelect.classList.add("class-priority-select");
   const newTaskDueDateInput = document.createElement("input");
 
   const lowPriorityOption = document.createElement("option");
