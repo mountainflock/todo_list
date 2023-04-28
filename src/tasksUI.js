@@ -17,8 +17,9 @@ export function updateTaskList(activeProject) {
   displayTaskList(activeProject);
 }
 
+addNewTaskButton();
+
 function displayTaskList(activeProject) {
-  addNewTaskButton();
   const projectTasksList = todoList[activeProject].tasks;
   const taskListTitle = document.querySelector(".task-list-title");
   taskListTitle.textContent = todoList[activeProject].title;
@@ -50,8 +51,40 @@ function addNewTaskButton() {
   formTask.addEventListener("submit", (event) => {
     event.preventDefault();
     handleNewTaskFormSubmit();
-    updateTaskList(activeProject);
   });
+}
+
+function handleNewTaskFormSubmit() {
+  const inputs = document.querySelectorAll("input");
+  const formTask = document.querySelector(".new-task");
+  const taskTitle = document.querySelector(".task-title").value;
+  const taskDescription = document.querySelector(".task-description").value;
+  const taskDueDate = document.querySelector(".task-due-date").value;
+  const taskPriority = document.querySelector("#task-priority").value;
+  const taskIsComplete = false;
+
+  const newTask = document.createElement("div");
+  newTask.classList.add("task-item");
+
+  if (taskTitle !== "") {
+    taskList.appendChild(newTask);
+    addNewTask(
+      taskTitle,
+      taskDescription,
+      taskPriority,
+      taskDueDate,
+      taskIsComplete,
+      activeProject
+    );
+
+    formTask.classList.toggle("new-task-invisible");
+
+    inputs.forEach((input) => {
+      input.value = "";
+    });
+
+    updateTaskList(activeProject);
+  }
 }
 
 function createCompleteTaskButton(taskDiv) {
@@ -130,11 +163,18 @@ function createTaskDueDateDiv(taskDiv) {
 
 function createEditTaskButton(taskDiv) {
   const editTaskButton = document.createElement("button");
-  editTaskButton.textContent = "✎";
+  const editButtonText = document.createElement("span");
+
+  editButtonText.textContent = "edit";
+  editButtonText.style.color = "grey";
+  editButtonText.classList.add("material-symbols-outlined");
+  editTaskButton.appendChild(editButtonText);
   editTaskButton.classList.add("edit-task-button");
+
   taskDiv.appendChild(editTaskButton);
 
   editTaskButton.addEventListener("click", () => {
+    updateTaskList(activeProject);
     handleEditTaskButton(taskDiv);
   });
 }
@@ -142,7 +182,13 @@ function createEditTaskButton(taskDiv) {
 function createDeleteTaskButton(taskDiv) {
   const deleteTaskButton = document.createElement("button");
   deleteTaskButton.classList.add("delete-task-button");
-  deleteTaskButton.textContent = "🗑️";
+  const deleteButtonText = document.createElement("span");
+
+  deleteButtonText.textContent = "delete";
+  deleteButtonText.style.color = "grey";
+  deleteTaskButton.classList.add("delete-task-button");
+  deleteButtonText.classList.add("material-symbols-outlined");
+  deleteTaskButton.appendChild(deleteButtonText);
   taskDiv.appendChild(deleteTaskButton);
 
   deleteTaskButton.addEventListener("click", () => {
@@ -159,37 +205,6 @@ function handleChangeStatusButton(activeProject, taskDiv) {
     completeTaskButton.textContent = "✔️";
   } else {
     completeTaskButton.textContent = "⬜";
-  }
-}
-
-function handleNewTaskFormSubmit() {
-  const inputs = document.querySelectorAll(".input");
-  const formTask = document.querySelector(".new-task");
-  const taskTitle = document.querySelector(".task-title").value;
-  const taskDescription = document.querySelector(".task-description").value;
-  const taskDueDate = document.querySelector(".task-due-date").value;
-  const taskPriority = document.querySelector("#task-priority").value;
-  const taskIsComplete = false;
-
-  const newTask = document.createElement("div");
-
-  if (taskTitle !== "") {
-    newTask.classList.add("task-item");
-    taskList.appendChild(newTask);
-    addNewTask(
-      taskTitle,
-      taskDescription,
-      taskPriority,
-      taskDueDate,
-      taskIsComplete,
-      activeProject
-    );
-
-    inputs.forEach((input) => {
-      input.value = "";
-    });
-
-    formTask.classList.toggle("new-task-invisible");
   }
 }
 
@@ -279,10 +294,6 @@ function createTaskEditForm(taskDiv) {
 
   taskEditForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log(
-      activeProject,
-      todoList[activeProject].tasks[taskDiv.dataset.index]
-    );
     editTask(
       activeProject,
       taskDiv.dataset.index,

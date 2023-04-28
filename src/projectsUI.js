@@ -7,17 +7,17 @@ import {
 
 import { updateTaskList } from "./tasksUI";
 
-export function renderPage() {
-  displayProjectList();
-}
-
 export let activeProject;
 
-const projectList = document.querySelector(".project-list");
-const newProjectButton = document.querySelector(".new-project-button");
+export function renderPage() {
+  activeProject = 0;
+  addNewProjectButton();
+  displayProjectList();
+  updateTaskList(activeProject);
+}
 
 export function displayProjectList() {
-  addNewProjectButton();
+  const projectList = document.querySelector(".project-list");
   for (let i = 0; i < todoList.length; i++) {
     const projectDiv = document.createElement("div");
     const projectTitleDiv = document.createElement("div");
@@ -31,10 +31,8 @@ export function displayProjectList() {
     projectTitleDiv.textContent = project.title;
     projectTitleDiv.addEventListener("click", () => {
       activeProject = projectDiv.dataset.index;
-      updateProjectList();
       updateTaskList(activeProject);
     });
-
     addEditProjectButton(projectDiv);
     addDeleteProjectButton(projectDiv);
   }
@@ -53,6 +51,8 @@ function addEditProjectButton(projectDiv) {
   projectDiv.appendChild(editProjectButton);
 
   editProjectButton.addEventListener("click", () => {
+    updateTaskList(activeProject);
+    updateProjectList();
     hanleEditProjectButton(projectDiv.dataset.index);
   });
 }
@@ -117,6 +117,8 @@ function hanleEditProjectButton(activeProject) {
 }
 
 function handleDeleteProjectButton(projectDiv) {
+  const projectList = document.querySelector(".project-list");
+
   deleteProject(parseInt(projectDiv.dataset.index));
   projectList.removeChild(projectDiv);
   updateProjectList();
@@ -124,14 +126,12 @@ function handleDeleteProjectButton(projectDiv) {
 
 function addNewProjectButton() {
   const formProject = document.querySelector(".new-project");
+  const newProjectButton = document.querySelector(".new-project-button");
+
   newProjectButton.addEventListener("click", () => {
     formProject.classList.toggle("new-project-invisible");
-    handlNewProjectButton();
   });
-}
 
-function handlNewProjectButton() {
-  const formProject = document.querySelector(".new-project");
   formProject.addEventListener("submit", function (event) {
     event.preventDefault();
     handleNewProjecFormSubmit();
@@ -141,9 +141,10 @@ function handlNewProjectButton() {
 function handleNewProjecFormSubmit() {
   const projectList = document.querySelector(".project-list");
   const projectTitle = document.querySelector(".project-title").value;
-  const newProject = document.createElement("div");
   const projectTitleInput = document.querySelector(".project-title");
   const formProject = document.querySelector(".new-project");
+
+  const newProject = document.createElement("div");
   newProject.classList.add("project-item");
 
   if (projectTitle !== "") {
@@ -156,6 +157,7 @@ function handleNewProjecFormSubmit() {
 }
 
 function updateProjectList() {
+  const projectList = document.querySelector(".project-list");
   projectList.textContent = "";
   displayProjectList();
 }
