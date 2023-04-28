@@ -51,6 +51,8 @@ function addEditProjectButton(projectDiv) {
   projectDiv.appendChild(editProjectButton);
 
   editProjectButton.addEventListener("click", () => {
+    const formProject = document.querySelector(".new-project");
+    formProject.classList.add("new-project-invisible");
     updateTaskList(activeProject);
     updateProjectList();
     hanleEditProjectButton(projectDiv.dataset.index);
@@ -85,6 +87,7 @@ function hanleEditProjectButton(activeProject) {
 
   const newProjectTitleForm = document.createElement("form");
   const newProjectTitleInput = document.createElement("input");
+  newProjectTitleInput.classList.add("new-project-title-input");
 
   newProjectTitleInput.value = todoList[activeProject].title;
   const confirmProjectEditButton = document.createElement("button");
