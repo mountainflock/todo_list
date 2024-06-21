@@ -5,14 +5,11 @@ import {
   changeTaskStatus,
   editTask,
 } from "./toDoFunctions";
-
 import { activeProject } from "./projectsUI";
-
 import { format } from "date-fns";
 
-const taskList = document.querySelector(".task-list");
-
 export function updateTaskList(activeProject) {
+  const taskList = document.querySelector(".task-list");
   taskList.textContent = "";
   displayTaskList(activeProject);
 }
@@ -22,6 +19,8 @@ addNewTaskButton();
 function displayTaskList(activeProject) {
   const projectTasksList = todoList[activeProject].tasks;
   const taskListTitle = document.querySelector(".task-list-title");
+  const taskList = document.querySelector(".task-list");
+
   taskListTitle.textContent = todoList[activeProject].title;
 
   for (let i = 0; i < projectTasksList.length; i++) {
@@ -58,6 +57,7 @@ function addNewTaskButton() {
 function handleNewTaskFormSubmit() {
   const inputs = document.querySelectorAll("input");
   const formTask = document.querySelector(".new-task");
+  const taskList = document.querySelector(".task-list");
   const taskTitle = document.querySelector(".task-title").value;
   const taskDescription = document.querySelector(".task-description").value;
   const taskDueDate = document.querySelector(".task-due-date").value;

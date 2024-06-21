@@ -21,14 +21,19 @@ export function displayProjectList() {
   for (let i = 0; i < todoList.length; i++) {
     const projectDiv = document.createElement("div");
     const projectTitleDiv = document.createElement("div");
+
     projectTitleDiv.classList.add("project-title-div");
     projectDiv.classList.add("project-item");
+
     projectList.appendChild(projectDiv);
+    projectDiv.appendChild(projectTitleDiv);
+
     projectTitleDiv.dataset.index = `${i}`;
     projectDiv.dataset.index = `${i}`;
-    projectDiv.appendChild(projectTitleDiv);
+
     const project = todoList[projectTitleDiv.dataset.index];
     projectTitleDiv.textContent = project.title;
+
     projectTitleDiv.addEventListener("click", () => {
       activeProject = projectDiv.dataset.index;
       updateTaskList(activeProject);
