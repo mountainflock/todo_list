@@ -12,7 +12,7 @@ The user can:
 * Edit any todo's property.
 * Delete a todo.
 
-The list can also be kept on the user's local storage via lib.dom.d.ts.
+The list can also be kept on the user's local storage.
 
 Live version can be found [here](https://mountainflockstodolistjs.netlify.app).
 
