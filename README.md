@@ -14,7 +14,7 @@ The user can:
 
 The list can also be kept on the user's local storage via lib.dom.d.ts.
 
-Live version can be found [here](https://mountainflockstodolist.netlify.app).
+Live version can be found [here](https://mountainflockstodolistjs.netlify.app).
 
 ## Technologies used: 
 
